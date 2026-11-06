@@ -1,4 +1,3 @@
-```markdown
 # 🐬 Руководство по представлениям (VIEW) в MySQL на Windows
 
 **Окружение:** Windows 10/11, Docker Desktop, Visual Studio Code, Git Bash.
@@ -25,10 +24,13 @@
 - [ ] Запустить **Docker Desktop** (дождаться статуса *Engine running*).
 - [ ] Открыть **Git Bash**.
 - [ ] Проверить работу Docker:
+
   ```bash
   docker ps
   ```
+
 - [ ] Создать рабочую папку и открыть её в VS Code:
+
   ```bash
   mkdir -p ~/my-mysql
   cd ~/my-mysql
@@ -73,18 +75,23 @@ docker run --name my-mysql \
   -v "$(pwd)/my.cnf:/etc/mysql/conf.d/my.cnf" \
   -d mysql:8.0
 ```
-![](/img/photo_2026-11-06_11-35-22.jpg)
+
+![Создание контейнера](/img/photo_2026-11-06_11-35-22.jpg)
+
 - [ ] Проверить, что контейнер запущен (`STATUS: Up`):
+
 ```bash
 docker ps -a
 ```
 
 - [ ] Очистить лог перед началом работы:
+
 ```bash
 docker exec my-mysql sh -c ': > /var/lib/mysql/general.log'
 ```
 
 - [ ] Подключиться к MySQL (пароль: `123`):
+
 ```bash
 docker exec -it my-mysql mysql --default-character-set=utf8mb4 -uroot -p
 ```
@@ -96,6 +103,7 @@ docker exec -it my-mysql mysql --default-character-set=utf8mb4 -uroot -p
 *Все команды ниже выполняются внутри клиента MySQL (приглашение `mysql>`).*
 
 - [ ] Создать БД и переключиться на неё:
+
 ```sql
 CREATE DATABASE IF NOT EXISTS sql_practice
   CHARACTER SET utf8mb4
@@ -104,6 +112,7 @@ USE sql_practice;
 ```
 
 - [ ] Создать таблицы:
+
 ```sql
 CREATE TABLE customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -124,6 +133,7 @@ CREATE TABLE orders (
 ```
 
 - [ ] Заполнить данными:
+
 ```sql
 INSERT INTO customers (name, email, city) VALUES
   ('Иван Иванов', 'ivan@example.com', 'Москва'),
@@ -140,12 +150,15 @@ INSERT INTO orders (customer_id, order_date, amount, status) VALUES
   (3, '2026-10-10', 1100.00, 'cancelled'),
   (4, '2026-10-12', 950.00, 'new');
 ```
-![](/img/photo_2026-11-05_13-43-34.jpg)
+
+![Заполнение данными](/img/photo_2026-11-05_13-43-34.jpg)
+
 ---
 
 ## 5. Работа с представлениями (VIEW)
 
 - [ ] **Простое VIEW** (список клиентов из Москвы):
+
 ```sql
 CREATE VIEW moscow_customers AS
 SELECT id, name, email
@@ -156,6 +169,7 @@ SELECT * FROM moscow_customers;
 ```
 
 - [ ] **VIEW с JOIN и агрегацией** (сводка по клиентам):
+
 ```sql
 CREATE VIEW customer_summary AS
 SELECT c.id,
@@ -171,6 +185,7 @@ SELECT * FROM customer_summary ORDER BY total_amount DESC;
 ```
 
 - [ ] **Просмотр и изменение VIEW**:
+
 ```sql
 -- Посмотреть определение
 SHOW CREATE VIEW customer_summary\G
@@ -186,6 +201,7 @@ DROP VIEW IF EXISTS moscow_customers;
 ```
 
 - [ ] **WITH CHECK OPTION** (защита от «невидимых» вставок):
+
 ```sql
 CREATE OR REPLACE VIEW moscow_customers AS
 SELECT id, name, email, city
@@ -205,6 +221,7 @@ VALUES ('Пётр Второй', 'petr2@example.com', 'Казань');
 *Скрываем столбец `email` от пользователя `analyst`.*
 
 - [ ] Выполнить в MySQL:
+
 ```sql
 CREATE VIEW public_customers AS
 SELECT id, name, city FROM customers;
@@ -218,11 +235,13 @@ GRANT SELECT ON sql_practice.public_customers TO 'analyst'@'%';
 ## 7. Создание дампа
 
 - [ ] Выйти из MySQL в Git Bash:
+
 ```sql
 \q
 ```
 
 - [ ] Сделать дамп (файл `dump.sql` появится в папке проекта):
+
 ```bash
 docker exec -e MYSQL_PWD=123 my-mysql mysqldump -uroot sql_practice > dump.sql
 ```
@@ -234,19 +253,24 @@ docker exec -e MYSQL_PWD=123 my-mysql mysqldump -uroot sql_practice > dump.sql
 > ⚠️ **Важно для Windows:** в Git Bash есть баг с преобразованием Unix-путей. Чтобы команды `docker exec` не искали файлы на диске `C:`, используйте префикс `MSYS_NO_PATHCONV=1`.
 
 - [ ] Забрать лог из контейнера в папку проекта:
+
 ```bash
 MSYS_NO_PATHCONV=1 docker cp my-mysql:/var/lib/mysql/general.log ./general.log
 ```
 
 - [ ] Отфильтровать служебные записи (получить только ваши SQL-запросы):
+
 ```bash
 MSYS_NO_PATHCONV=1 docker exec my-mysql cat /var/lib/mysql/general.log \
   | grep "Query" \
   | grep -v -E "SET NAMES|SET autocommit|SET sql_mode|SET character_set_results|SHOW VARIABLES|SHOW STATUS|SHOW WARNINGS|SELECT @@|SELECT DATABASE\(\)|time_zone" \
   > my_actions.log
 ```
-![](/img/image.png)
+
+![Лог действий](/img/image.png)
+
 - [ ] Очистить лог для следующих задач:
+
 ```bash
 docker exec my-mysql sh -c ': > /var/lib/mysql/general.log'
 ```
@@ -284,5 +308,3 @@ docker exec my-mysql sh -c ': > /var/lib/mysql/general.log'
 | `ERROR 1007 ... database exists` | База уже создана | Используйте `CREATE DATABASE IF NOT EXISTS` |
 
 ---
-*Файл сгенерирован для учебного курса по базам данных.*
-```
