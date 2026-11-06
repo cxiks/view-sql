@@ -1,0 +1,174 @@
+2026-11-06T08:17:39.303911Z	    9 Query	DROP DATABASE sql_practice
+2026-11-06T08:17:39.316645Z	    9 Query	CREATE DATABASE sql_practice CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+2026-11-06T08:17:39.927098Z	    9 Query	show databases
+2026-11-06T08:17:39.928331Z	    9 Query	show tables
+2026-11-06T08:18:07.666990Z	   10 Query	select @@version_comment limit 1
+2026-11-06T08:18:35.159126Z	   10 Query	CREATE DATABASE sql_practice
+2026-11-06T08:18:38.865046Z	   10 Query	show databases
+2026-11-06T08:18:38.866326Z	   10 Query	show tables
+2026-11-06T08:18:42.641561Z	   10 Query	CREATE TABLE customers (
+2026-11-06T08:18:46.929848Z	   10 Query	CREATE TABLE orders (
+2026-11-06T08:18:51.292422Z	   10 Query	INSERT INTO customers (name, email, city) VALUES
+2026-11-06T08:18:56.663900Z	   10 Query	INSERT INTO orders (customer_id, order_date, amount, status) VALUES
+2026-11-06T08:19:00.571275Z	   10 Query	SHOW TABLES
+2026-11-06T08:19:00.577060Z	   10 Query	SELECT * FROM customers
+2026-11-06T08:19:01.538858Z	   10 Query	SELECT * FROM orders
+2026-11-06T08:19:06.322023Z	   10 Query	CREATE VIEW moscow_customers AS
+2026-11-06T08:19:10.358162Z	   10 Query	SELECT * FROM moscow_customers
+2026-11-06T08:19:17.566747Z	   10 Query	CREATE VIEW customer_summary AS
+2026-11-06T08:19:26.418238Z	   10 Query	SELECT * FROM customer_summary ORDER BY total_amount DESC
+2026-11-06T08:19:30.499473Z	   10 Query	SELECT name, total_amount FROM customer_summary WHERE total_amount > 2000
+2026-11-06T08:19:34.152404Z	   10 Query	SHOW FULL TABLES WHERE Table_type = 'VIEW'
+2026-11-06T08:19:38.515131Z	   10 Query	SHOW CREATE VIEW customer_summary
+2026-11-06T08:19:42.435521Z	   10 Query	SELECT * FROM moscow_customers
+2026-11-06T08:19:48.935981Z	   10 Query	CREATE OR REPLACE VIEW moscow_customers AS
+2026-11-06T08:19:52.498571Z	   10 Query	SELECT * FROM moscow_customers
+2026-11-06T08:19:56.243128Z	   10 Query	DROP VIEW IF EXISTS moscow_customers
+2026-11-06T08:19:58.909610Z	   10 Query	SHOW TABLES
+2026-11-06T08:20:02.841570Z	   10 Query	CREATE VIEW active_customers AS
+2026-11-06T08:20:06.523259Z	   10 Query	UPDATE active_customers SET city = 'Сочи' WHERE id = 2
+2026-11-06T08:20:10.422309Z	   10 Query	SELECT * FROM customers WHERE id = 2
+2026-11-06T08:20:13.843906Z	   10 Query	INSERT INTO active_customers (name, email, city)
+2026-11-06T08:20:18.722421Z	   10 Query	DELETE FROM active_customers WHERE id = 6
+2026-11-06T08:20:23.045462Z	   10 Query	CREATE VIEW customer_summary AS
+2026-11-06T08:20:26.163249Z	   10 Query	UPDATE customer_summary SET name = 'X' WHERE id = 1
+2026-11-06T08:20:32.872885Z	   10 Query	CREATE OR REPLACE VIEW moscow_customers AS
+2026-11-06T08:20:36.084679Z	   10 Query	INSERT INTO moscow_customers (name, email, city)
+2026-11-06T08:20:40.040495Z	   10 Query	SELECT * FROM customers WHERE email = 'petr2@example.com'
+2026-11-06T08:20:40.400330Z	   10 Query	SELECT * FROM moscow_customers
+2026-11-06T08:20:44.145913Z	   10 Query	CREATE OR REPLACE VIEW moscow_customers AS
+2026-11-06T08:20:47.043503Z	   10 Query	INSERT INTO moscow_customers (name, email, city)
+2026-11-06T08:20:51.787783Z	   10 Query	DELETE FROM customers WHERE email IN ('petr2@example.com', 'petr3@example.com')
+2026-11-06T08:20:57.160138Z	   10 Query	CREATE VIEW public_customers AS
+2026-11-06T08:21:01.061831Z	   10 Query	CREATE USER 'analyst'@'%' IDENTIFIED BY <secret>
+2026-11-06T08:21:05.433954Z	   10 Query	GRANT SELECT ON sql_practice.public_customers TO 'analyst'@'%'
+2026-11-06T08:21:16.448163Z	   11 Query	/*!40100 SET @@SQL_MODE='' */
+2026-11-06T08:21:16.448264Z	   11 Query	/*!40103 SET TIME_ZONE='+00:00' */
+2026-11-06T08:21:16.448454Z	   11 Query	/*!80000 SET SESSION information_schema_stats_expiry=0 */
+2026-11-06T08:21:16.448568Z	   11 Query	SET SESSION NET_READ_TIMEOUT= 86400, SESSION NET_WRITE_TIMEOUT= 86400
+2026-11-06T08:21:16.453300Z	   11 Query	SELECT LOGFILE_GROUP_NAME, FILE_NAME, TOTAL_EXTENTS, INITIAL_SIZE, ENGINE, EXTRA FROM INFORMATION_SCHEMA.FILES WHERE ENGINE = 'ndbcluster' AND FILE_TYPE = 'UNDO LOG' AND FILE_NAME IS NOT NULL AND LOGFILE_GROUP_NAME IS NOT NULL AND LOGFILE_GROUP_NAME IN (SELECT DISTINCT LOGFILE_GROUP_NAME FROM INFORMATION_SCHEMA.FILES WHERE ENGINE = 'ndbcluster' AND FILE_TYPE = 'DATAFILE' AND TABLESPACE_NAME IN (SELECT DISTINCT TABLESPACE_NAME FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA IN ('sql_practice'))) GROUP BY LOGFILE_GROUP_NAME, FILE_NAME, ENGINE, TOTAL_EXTENTS, INITIAL_SIZE ORDER BY LOGFILE_GROUP_NAME
+2026-11-06T08:21:16.457013Z	   11 Query	SELECT DISTINCT TABLESPACE_NAME, FILE_NAME, LOGFILE_GROUP_NAME, EXTENT_SIZE, INITIAL_SIZE, ENGINE FROM INFORMATION_SCHEMA.FILES WHERE FILE_TYPE = 'DATAFILE' AND TABLESPACE_NAME IN (SELECT DISTINCT TABLESPACE_NAME FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA IN ('sql_practice')) ORDER BY TABLESPACE_NAME, LOGFILE_GROUP_NAME
+2026-11-06T08:21:16.461925Z	   11 Query	show tables
+2026-11-06T08:21:16.463917Z	   11 Query	LOCK TABLES `active_customers` READ /*!32311 LOCAL */,`customer_summary` READ /*!32311 LOCAL */,`customers` READ /*!32311 LOCAL */,`moscow_customers` READ /*!32311 LOCAL */,`orders` READ /*!32311 LOCAL */,`public_customers` READ /*!32311 LOCAL */
+2026-11-06T08:21:16.464677Z	   11 Query	show table status like 'active\_customers'
+2026-11-06T08:21:16.465896Z	   11 Query	SET SQL_QUOTE_SHOW_CREATE=1
+2026-11-06T08:21:16.466109Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.466282Z	   11 Query	show create table `active_customers`
+2026-11-06T08:21:16.466552Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.466734Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.466905Z	   11 Query	SHOW FIELDS FROM `active_customers`
+2026-11-06T08:21:16.468384Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.468604Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.468714Z	   11 Query	use `sql_practice`
+2026-11-06T08:21:16.468918Z	   11 Query	select @@collation_database
+2026-11-06T08:21:16.469254Z	   11 Query	SHOW TRIGGERS LIKE 'active\_customers'
+2026-11-06T08:21:16.471366Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.471510Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.471700Z	   11 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'sql_practice' AND TABLE_NAME = 'active_customers'
+2026-11-06T08:21:16.472134Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.472258Z	   11 Query	show table status like 'customer\_summary'
+2026-11-06T08:21:16.472885Z	   11 Query	SET SQL_QUOTE_SHOW_CREATE=1
+2026-11-06T08:21:16.472989Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.473091Z	   11 Query	show create table `customer_summary`
+2026-11-06T08:21:16.473280Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.473388Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.473502Z	   11 Query	SHOW FIELDS FROM `customer_summary`
+2026-11-06T08:21:16.474155Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.474312Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.474470Z	   11 Query	use `sql_practice`
+2026-11-06T08:21:16.474613Z	   11 Query	select @@collation_database
+2026-11-06T08:21:16.474769Z	   11 Query	SHOW TRIGGERS LIKE 'customer\_summary'
+2026-11-06T08:21:16.475406Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.475570Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.475738Z	   11 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'sql_practice' AND TABLE_NAME = 'customer_summary'
+2026-11-06T08:21:16.475959Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.476094Z	   11 Query	show table status like 'customers'
+2026-11-06T08:21:16.477110Z	   11 Query	SET SQL_QUOTE_SHOW_CREATE=1
+2026-11-06T08:21:16.477202Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.477317Z	   11 Query	show create table `customers`
+2026-11-06T08:21:16.477544Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.477672Z	   11 Query	show fields from `customers`
+2026-11-06T08:21:16.478316Z	   11 Query	show fields from `customers`
+2026-11-06T08:21:16.478944Z	   11 Query	SELECT /*!40001 SQL_NO_CACHE */ * FROM `customers`
+2026-11-06T08:21:16.479187Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.479341Z	   11 Query	use `sql_practice`
+2026-11-06T08:21:16.479505Z	   11 Query	select @@collation_database
+2026-11-06T08:21:16.479693Z	   11 Query	SHOW TRIGGERS LIKE 'customers'
+2026-11-06T08:21:16.480822Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.481071Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.481275Z	   11 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'sql_practice' AND TABLE_NAME = 'customers'
+2026-11-06T08:21:16.481619Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.481853Z	   11 Query	show table status like 'moscow\_customers'
+2026-11-06T08:21:16.482676Z	   11 Query	SET SQL_QUOTE_SHOW_CREATE=1
+2026-11-06T08:21:16.482865Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.483023Z	   11 Query	show create table `moscow_customers`
+2026-11-06T08:21:16.483304Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.483494Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.483656Z	   11 Query	SHOW FIELDS FROM `moscow_customers`
+2026-11-06T08:21:16.484895Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.485101Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.485297Z	   11 Query	use `sql_practice`
+2026-11-06T08:21:16.485478Z	   11 Query	select @@collation_database
+2026-11-06T08:21:16.485756Z	   11 Query	SHOW TRIGGERS LIKE 'moscow\_customers'
+2026-11-06T08:21:16.486777Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.486953Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.487103Z	   11 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'sql_practice' AND TABLE_NAME = 'moscow_customers'
+2026-11-06T08:21:16.487315Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.487485Z	   11 Query	show table status like 'orders'
+2026-11-06T08:21:16.488252Z	   11 Query	SET SQL_QUOTE_SHOW_CREATE=1
+2026-11-06T08:21:16.488374Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.488477Z	   11 Query	show create table `orders`
+2026-11-06T08:21:16.488679Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.488794Z	   11 Query	show fields from `orders`
+2026-11-06T08:21:16.489934Z	   11 Query	show fields from `orders`
+2026-11-06T08:21:16.493226Z	   11 Query	SELECT /*!40001 SQL_NO_CACHE */ * FROM `orders`
+2026-11-06T08:21:16.493601Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.493769Z	   11 Query	use `sql_practice`
+2026-11-06T08:21:16.493947Z	   11 Query	select @@collation_database
+2026-11-06T08:21:16.494087Z	   11 Query	SHOW TRIGGERS LIKE 'orders'
+2026-11-06T08:21:16.495172Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.495352Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.495540Z	   11 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'sql_practice' AND TABLE_NAME = 'orders'
+2026-11-06T08:21:16.495863Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.495989Z	   11 Query	show table status like 'public\_customers'
+2026-11-06T08:21:16.497086Z	   11 Query	SET SQL_QUOTE_SHOW_CREATE=1
+2026-11-06T08:21:16.497304Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.497462Z	   11 Query	show create table `public_customers`
+2026-11-06T08:21:16.497935Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.498098Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.498303Z	   11 Query	SHOW FIELDS FROM `public_customers`
+2026-11-06T08:21:16.499707Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.499951Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.500142Z	   11 Query	use `sql_practice`
+2026-11-06T08:21:16.500347Z	   11 Query	select @@collation_database
+2026-11-06T08:21:16.500520Z	   11 Query	SHOW TRIGGERS LIKE 'public\_customers'
+2026-11-06T08:21:16.501213Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.501382Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.501538Z	   11 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'sql_practice' AND TABLE_NAME = 'public_customers'
+2026-11-06T08:21:16.501793Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.502014Z	   11 Query	UNLOCK TABLES
+2026-11-06T08:21:16.502306Z	   11 Query	show tables
+2026-11-06T08:21:16.503090Z	   11 Query	LOCK TABLES `active_customers` READ /*!32311 LOCAL */,`customer_summary` READ /*!32311 LOCAL */,`customers` READ /*!32311 LOCAL */,`moscow_customers` READ /*!32311 LOCAL */,`orders` READ /*!32311 LOCAL */,`public_customers` READ /*!32311 LOCAL */
+2026-11-06T08:21:16.503374Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.503490Z	   11 Query	SHOW CREATE TABLE `active_customers`
+2026-11-06T08:21:16.503679Z	   11 Query	SELECT CHECK_OPTION, DEFINER, SECURITY_TYPE,        CHARACTER_SET_CLIENT, COLLATION_CONNECTION FROM information_schema.views WHERE table_name='active_customers' AND table_schema='sql_practice'
+2026-11-06T08:21:16.504372Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.504482Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.504577Z	   11 Query	SHOW CREATE TABLE `customer_summary`
+2026-11-06T08:21:16.504798Z	   11 Query	SELECT CHECK_OPTION, DEFINER, SECURITY_TYPE,        CHARACTER_SET_CLIENT, COLLATION_CONNECTION FROM information_schema.views WHERE table_name='customer_summary' AND table_schema='sql_practice'
+2026-11-06T08:21:16.505137Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.505251Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.505352Z	   11 Query	SHOW CREATE TABLE `customers`
+2026-11-06T08:21:16.505551Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.505671Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.505752Z	   11 Query	SHOW CREATE TABLE `moscow_customers`
+2026-11-06T08:21:16.505960Z	   11 Query	SELECT CHECK_OPTION, DEFINER, SECURITY_TYPE,        CHARACTER_SET_CLIENT, COLLATION_CONNECTION FROM information_schema.views WHERE table_name='moscow_customers' AND table_schema='sql_practice'
+2026-11-06T08:21:16.506380Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.506514Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.506635Z	   11 Query	SHOW CREATE TABLE `orders`
+2026-11-06T08:21:16.506874Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.507001Z	   11 Query	SET SESSION character_set_results = 'binary'
+2026-11-06T08:21:16.507109Z	   11 Query	SHOW CREATE TABLE `public_customers`
+2026-11-06T08:21:16.507288Z	   11 Query	SELECT CHECK_OPTION, DEFINER, SECURITY_TYPE,        CHARACTER_SET_CLIENT, COLLATION_CONNECTION FROM information_schema.views WHERE table_name='public_customers' AND table_schema='sql_practice'
+2026-11-06T08:21:16.507719Z	   11 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-06T08:21:16.507854Z	   11 Query	UNLOCK TABLES
